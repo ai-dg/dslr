@@ -116,9 +116,16 @@ def ft_recover_stats_from_numeric_cols(data):
             "50%": 0,
             "75%": 0,
             "Max": 0,
+            "Range": 0,
+            "Variance": 0,
+            "IQR": 0,
+            "Skewness": 0,
+            "Kurtosis": 0,
         }
+
     # Count, mean, std and min values
     for key, values in data.items():
+        n = len(values)
         stats[key]["Count"] = len(values)
 
         sum_values = 0
@@ -132,19 +139,33 @@ def ft_recover_stats_from_numeric_cols(data):
 
         for value in values:
             sum_squared_diff += (value - mean) ** 2
-
-        std = math.sqrt(sum_squared_diff / len(values))
+        
+        variance = sum_squared_diff / n
+        std = math.sqrt(sum_squared_diff / (len(values) - 1))
         stats[key]["Std"] = std
 
         stats[key]["Min"] = min(values)
         stats[key]["Max"] = max(values)
+        stats[key]["Range"] = stats[key]["Max"] - stats[key]["Min"]
+        stats[key]["Variance"] = variance
 
-    # 25%, 50%, 75%
-    for key, values in data.items():
-        values.sort()
-        stats[key]["25%"] = ft_get_values_for_percents(values, 0.25)
-        stats[key]["50%"] = ft_get_values_for_percents(values, 0.50)
-        stats[key]["75%"] = ft_get_values_for_percents(values, 0.75)
+        # 25%, 50%, 75%
+        sorted_values = sorted(values)
+        stats[key]["25%"] = ft_get_values_for_percents(sorted_values, 0.25)
+        stats[key]["50%"] = ft_get_values_for_percents(sorted_values, 0.50)
+        stats[key]["75%"] = ft_get_values_for_percents(sorted_values, 0.75)
+        stats[key]["IQR"] = stats[key]["75%"] - stats[key]["25%"]
+
+        # Skewness
+        skew_numer = sum((v - mean) ** 3 for v in values) / n
+        skew_denom = std ** 3 if std != 0 else 1
+        stats[key]["Skewness"] = skew_numer / skew_denom
+
+        # Kurtosis (Fisher definition, excess kurtosis)
+        kurt_numer = sum((v - mean) ** 4 for v in values) / n
+        kurt_denom = std ** 4 if std != 0 else 1
+        stats[key]["Kurtosis"] = kurt_numer / kurt_denom - 3  
+        
 
     return stats
 
@@ -155,12 +176,15 @@ def shorten(col, width):
 def ft_show_stats_in_terminal(data):
     content = ""
 
-    col_width = 15
+    col_width = 18
 
     del data["Index"]
     
     headers = list(data.keys())
-    stat_labels = ["Count", "Mean", "Std", "Min", "25%", "50%", "75%", "Max"]
+    stat_labels = [
+        "Count", "Mean", "Std", "Min", "25%", "50%", "75%", "Max",
+        "Range", "Variance", "IQR", "Skewness", "Kurtosis"
+    ]
 
     content += f"{'':{col_width}}"
     for col in headers:

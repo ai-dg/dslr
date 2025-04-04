@@ -11,8 +11,7 @@ class Data(object):
     data_csv: dict
     notes_by_house : dict
 
-
-def reverse_dict(data):
+def ft_reverse_dict(data):
     keys = list(data.keys())
     nbr_rows = len(data[keys[0]])
     rows = []
@@ -25,7 +24,7 @@ def reverse_dict(data):
     
     return rows
 
-def check_number_of_keys(reverse_data):
+def ft_check_number_of_keys(reverse_data):
     expected_keys = set(reverse_data[0].keys())
     print(f"Expected number of columns: {len(expected_keys)}")
 
@@ -41,7 +40,7 @@ def check_number_of_keys(reverse_data):
                 print(f"Surplus keys  : {extra}")
 
 
-def take_notes_by_house_and_by_subjects(data, data_subjects):
+def ft_take_notes_by_house_and_by_subjects(data, data_subjects):
     notes_by_house = {}
     house_list = []
 
@@ -55,7 +54,7 @@ def take_notes_by_house_and_by_subjects(data, data_subjects):
         for house in house_list:
             notes_by_house[house][col] = []
 
-    reverse_data = reverse_dict(data)
+    reverse_data = ft_reverse_dict(data)
 
     for row in reverse_data:
         house = row.get("Hogwarts House")
@@ -93,7 +92,7 @@ def ft_put_subject_into_plot(data, subject, output_dir):
     plt.hist(griff, color="red", bins=bins, alpha=alpha, label="Gryffindor", edgecolor="black")
     plt.hist(raven, color="blue", bins=bins, alpha=alpha, label="Ravenclaw", edgecolor="black")
     plt.hist(slyth, color="green", bins=bins, alpha=alpha, label="Slytherin", edgecolor="black")
-    plt.hist(huffle, color="yellow", bins=bins, alpha=alpha, label="Hufflepuff", edgecolor="black")
+    plt.hist(huffle, color="gold", bins=bins, alpha=alpha, label="Hufflepuff", edgecolor="black")
     plt.title(f"Distribution of '{subject}' scores by house")
     plt.xlabel("Score")
     plt.ylabel(f"Number of students per score range\n({total_students} out of 1599 students with available scores)")
@@ -133,11 +132,8 @@ def main():
     data.numeric_col = ft_recover_numeric_values_from_columns(data.data_csv)
 
     del data.numeric_col["Index"]
-    data.notes_by_house = take_notes_by_house_and_by_subjects(data.data_csv, data.numeric_col)
+    data.notes_by_house = ft_take_notes_by_house_and_by_subjects(data.data_csv, data.numeric_col)
     ft_put_histogram_into_plot(data.notes_by_house)
-    # print(data.data_csv.keys())
-    # print(data.numeric_col.keys())
-    
 
 
 if __name__ == "__main__":
