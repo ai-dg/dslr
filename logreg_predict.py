@@ -35,6 +35,13 @@ def ft_recovering_numeric_features_from_csv_test(data):
     }
 
     del data.numeric_features["Index"]
+    # del data.numeric_features["Transfiguration"]
+    # del data.numeric_features["Astronomy"]
+    # del data.numeric_features["Herbology"]
+    # del data.numeric_features["Muggle Studies"]
+    # del data.numeric_features["Defense Against the Dark Arts"]
+    # del data.numeric_features["Care of Magical Creatures"]
+    # del data.numeric_features["Flying"]
 
 def sigmoid(z):
     # Clamp la valeur de z pour éviter les overflow

@@ -2,6 +2,7 @@ import csv
 import sys
 import math
 import json
+import time
 from histogram import ft_reverse_dict
 from describe import ft_recovering_data_from_dataset, ft_is_list_numeric
 from pair_plot import Data_pairs
@@ -223,6 +224,13 @@ def ft_training_one_vs_all_model(house, data_csv, training_method):
     data = Data()
     data.numeric_col_with_houses = ft_recover_numeric_values_and_houses(data_csv)
     del data.numeric_col_with_houses["Index"]
+    # del data.numeric_col_with_houses["Transfiguration"]
+    # del data.numeric_col_with_houses["Astronomy"]
+    # del data.numeric_col_with_houses["Herbology"]
+    # del data.numeric_col_with_houses["Muggle Studies"]
+    # del data.numeric_col_with_houses["Defense Against the Dark Arts"]
+    # del data.numeric_col_with_houses["Care of Magical Creatures"]
+    # del data.numeric_col_with_houses["Flying"]
 
     data.binary_houses = ft_get_binary_houses(data.numeric_col_with_houses, house)
     data.numeric_features = data.numeric_col_with_houses.copy()
@@ -232,6 +240,7 @@ def ft_training_one_vs_all_model(house, data_csv, training_method):
     data.x, data.y = ft_get_x_and_y_for_matrix(data.numeric_features, data.binary_houses)
     
     data.list_of_subjects = list(data.numeric_features.keys())
+    
     
 
     if training_method == "BGD":
@@ -243,6 +252,8 @@ def ft_training_one_vs_all_model(house, data_csv, training_method):
     else:
         print("❌ Unknown training method.")
         exit(1)
+
+    
 
     theta_dict = {
         "bias": data.theta_values[0]
@@ -272,6 +283,7 @@ def main():
 
     valid_methods = {"BGD", "SGD", "M-Batch"}
     training_method = ""
+    
 
     while training_method not in valid_methods:
         training_method = input("Choose training method (BGD, SGD, M-Batch): ").strip()
@@ -288,8 +300,19 @@ def main():
             house_list.append(house)
     
     data.to_export = {}
+
+    start = time.time()
+
+
     for house in house_list:
         data.to_export[house] = ft_training_one_vs_all_model(house, data.data_csv, training_method)
+
+    end = time.time()
+
+    elapsed_time = end - start
+    print(f"Training time: {elapsed_time:.2f} seconds")
+
+
 
     data.data_csv.clear()
     path_json = "./trained_model.json"

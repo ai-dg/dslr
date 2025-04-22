@@ -1,3 +1,4 @@
+from re import L
 import sys
 import os
 from describe import ft_recovering_data_from_dataset, ft_recover_numeric_values_from_columns, ft_is_float
@@ -13,6 +14,7 @@ class Data(object):
 
 def ft_reverse_dict(data):
     keys = list(data.keys())
+    # print(keys)
     nbr_rows = len(data[keys[0]])
     rows = []
 
@@ -70,15 +72,24 @@ def ft_take_notes_by_house_and_by_subjects(data, data_subjects):
     return notes_by_house
 
 
+def ft_taking_not_zero_values(data):
+    lst = []
+    for x in data:
+        if x != 0:
+            lst.append(x)
+
+    return lst
+
+
 def ft_put_subject_into_plot(data, subject, output_dir):
-    griff = data["Gryffindor"][subject]
-    griff = [x for x in griff if x != 0]
-    raven = data["Ravenclaw"][subject]
-    raven = [x for x in raven if x != 0]
-    slyth = data["Slytherin"][subject]
-    slyth = [x for x in slyth if x != 0]
-    huffle = data["Hufflepuff"][subject]
-    huffle = [x for x in huffle if x != 0]
+    griff_temp = data["Gryffindor"][subject]
+    griff = ft_taking_not_zero_values(griff_temp)
+    raven_temp = data["Ravenclaw"][subject]
+    raven = ft_taking_not_zero_values(raven_temp)  
+    slyth_temp = data["Slytherin"][subject]
+    slyth = ft_taking_not_zero_values(slyth_temp)
+    huffle_temp = data["Hufflepuff"][subject]
+    huffle = ft_taking_not_zero_values(huffle_temp)
 
     total_students = len(griff) + len(raven) + len(slyth) + len(huffle)
 
@@ -131,7 +142,8 @@ def main():
     data.data_csv = ft_recovering_data_from_dataset(path)
     data.numeric_col = ft_recover_numeric_values_from_columns(data.data_csv)
 
-    del data.numeric_col["Index"]
+    if "Index" in data.numeric_col:
+        del data.numeric_col["Index"]
     data.notes_by_house = ft_take_notes_by_house_and_by_subjects(data.data_csv, data.numeric_col)
     ft_put_histogram_into_plot(data.notes_by_house)
 
