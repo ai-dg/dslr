@@ -8,6 +8,8 @@
 
 ---
 
+> ⚠️ All analysis, conclusions and results are detailed in the Report.pdf file.
+
 ## ▌Project Overview
 
 This project is a complete machine learning pipeline built from scratch — with **no external ML library** — to classify students into Hogwarts houses using **logistic regression**.
