@@ -67,5 +67,72 @@ You may use: `matplotlib`, `math`, `csv`, `os`
 
 > ❌ No Pandas, Scikit-learn, Numpy, or functions like .mean(), .std(), etc.
 
+### ■ Installation & Usage
+1. Clone this repository
 
+```bash
+git clone https://github.com/your-username/dslr.git
+cd dslr
+```
+
+2. Launch data visualization scripts:
+
+```bash
+python3 describe.py dataset_train.csv
+python3 histogram.py dataset_train.csv
+python3 scatter_plot.py dataset_train.csv
+python3 pair_plot.py dataset_train.csv
+```
+
+3. Train the classifier:
+
+```bash
+python3 logreg_train.py dataset_train.csv
+# Then choose method: BGD, SGD or M-Batch
+```
+
+4. Predict student houses from test set:
+
+```bash
+python3 logreg_predict.py dataset_test.csv
+```
+This generates houses.csv.
+
+### ▌Bonus Features
+
+✔️ Normalization of features
+✔️ Training with multiple optimization strategies
+✔️ Export trained θ per house to JSON
+✔️ Visualization of pairwise subject correlations
+✔️ Calculation of precision vs actual labels
+
+
+### ▌Example Output
+
+```bash
+$ python3 logreg_train.py dataset_train.csv
+Choose training method (BGD, SGD, M-Batch): SGD
+📉 SGD average Log loss for Gryffindor: 0.045584
+📉 SGD average Log loss for Hufflepuff: 0.058805
+📉 SGD average Log loss for Ravenclaw: 0.069896
+📉 SGD average Log loss for Slytherin: 0.048540
+
+$ python3 logreg_predict.py dataset_test.csv
+✅ Results exported into houses.csv
+✅ Accuracy: 98.25%
+```
+
+### ▌Summary
+This project teaches you how to:
+
+- Manually analyze and visualize a dataset,
+- Implement your own gradient descent,
+- Train and apply a multiclass classifier,
+- Evaluate and optimize performance (log-loss, accuracy),
+- Work like a real data scientist... muggle or not.
+
+### 📜 License
+Project developed at **42 Paris** as part of the **AI/ML discovery curriculum.**
+For educational purposes only.
+Do not publish derivative work without referencing the original subject.
 
