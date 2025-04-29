@@ -25,8 +25,8 @@ It's designed as part of **42 Paris' AI curriculum**, following the logic of `ft
 
 ## ▌Features
 
-✔️ Full feature engineering and cleaning
-✔️ Statistical description (mean, std, IQR, skewness, kurtosis...)
+✔️ Full feature engineering and cleaning  
+✔️ Statistical description (mean, std, IQR, skewness, kurtosis...)  
 ✔️ Data visualizations: Histogram, Scatter Plot, Pair Plot  
 ✔️ Logistic regression classifier (One-vs-All)  
 ✔️ Implements BGD, SGD and Mini-Batch GD  
@@ -102,11 +102,11 @@ This generates houses.csv.
 
 ### ▌Bonus Features
 
-✔️ Normalization of features
-✔️ Training with multiple optimization strategies
-✔️ Export trained θ per house to JSON
-✔️ Visualization of pairwise subject correlations
-✔️ Calculation of precision vs actual labels
+✔️ Normalization of features  
+✔️ Training with multiple optimization strategies  
+✔️ Export trained θ per house to JSON  
+✔️ Visualization of pairwise subject correlations   
+✔️ Calculation of precision vs actual labels  
 
 
 ### ▌Example Output
