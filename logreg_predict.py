@@ -5,6 +5,7 @@ import json
 from histogram import ft_reverse_dict
 from describe import ft_recovering_data_from_dataset, ft_is_list_numeric
 from pair_plot import Data_pairs
+from logreg_train import ft_normalize_features
 
 class Data(object):
     data_csv: dict
@@ -28,11 +29,14 @@ def ft_load_data_from_json(path):
         
     return data
 
-def ft_recovering_numeric_features_from_csv_test(data):
-    data.numeric_features = {
-        key : values for key, values in data.data_csv_test.items()
-        if ft_is_list_numeric(values)
-    }
+def ft_recovering_numeric_features_from_csv_test(data : Data):
+    
+    data.numeric_features = {}
+
+    for keys, values in data.data_csv_test.items():
+        if ft_is_list_numeric(values):
+            data.numeric_features[keys] = values
+
 
     del data.numeric_features["Index"]
     # del data.numeric_features["Transfiguration"]
@@ -44,17 +48,21 @@ def ft_recovering_numeric_features_from_csv_test(data):
     # del data.numeric_features["Flying"]
 
 def sigmoid(z):
-    # Clamp la valeur de z pour éviter les overflow
+    # Sigmoid different pour eviter l'overflow
     z = max(min(z, 500), -500)
     return 1 / (1 + math.exp(-z))
 
 
-def ft_predict_proba_for_student(x_i, theta_dict):
-    poids = [theta_dict["bias"]] + [theta_dict[key] for key in theta_dict if key != "bias"]
-    z = sum(w * x for w, x in zip(poids, x_i))
-    return sigmoid(z)
+def ft_predict_value_for_each_subject(x_i, theta_dict):
+    z = 0
+    for theta, x in zip(theta_dict.values(), x_i):
+        z += theta * x
 
-def ft_predict_all_houses(data):
+    result = sigmoid(z)
+    return result
+
+
+def ft_predict_all_houses(data : Data):
     reverse_data = ft_reverse_dict(data.numeric_features)
     subjects = list(data.numeric_features.keys())
 
@@ -66,16 +74,18 @@ def ft_predict_all_houses(data):
         for house, infos in data.data_json.items():
             theta = infos["theta"]
 
-            # Normalisation spécifique à cette maison
-            x_i = [1.0]  # biais
+            # biais
+            x_i = [1.0]  
             for subj in subjects:
                 value = student[subj]
                 x_i.append(value)
 
-            proba = ft_predict_proba_for_student(x_i, theta)
+            proba = ft_predict_value_for_each_subject(x_i, theta)
+            # print(proba)
             house_probs[house] = proba
             # print(house_probs)
-        # Choisir la maison avec la plus haute proba
+
+            
         predicted_house = max(house_probs, key=house_probs.get)
         data.predictions_str.append((idx, predicted_house))
         # break
@@ -92,19 +102,8 @@ def ft_save_predictions_to_csv(data):
 
     print(f"✅ Résultats sauvegardés dans {path_csv}")
         
-def ft_normalize_data(features: dict):
-    normalized = {}
-    for key, values in features.items():
-        mean = sum(values) / len(values)
-        std = math.sqrt(sum((v - mean) ** 2 for v in values) / len(values))
-        if std == 0:
-            normalized[key] = [0 for _ in values]
-        else:
-            normalized[key] = [(v - mean) / std for v in values]
-    return normalized
 
-
-def ft_calculate_percent_error(data):
+def ft_calculate_percent_error(data : Data):
     correct = 0
     total = 0
 
@@ -121,7 +120,6 @@ def ft_calculate_percent_error(data):
     print(f"❌ Erreurs: {errors} / {total}")
     print(f"📉 Pourcentage d'erreur: {error_rate:.2f}%")
     print(f"✅ Précision: {accuracy:.2f}%")
-
 
 
 
@@ -142,10 +140,17 @@ def main():
 
     data.data_json = ft_load_data_from_json(path_json)
     data.data_csv_test = ft_recovering_data_from_dataset(path)
-    ft_recovering_numeric_features_from_csv_test(data)    
-    data.numeric_features = ft_normalize_data(data.numeric_features)
+
+    ft_recovering_numeric_features_from_csv_test(data)
+
+    data.numeric_features = ft_normalize_features(data.numeric_features)
+
     ft_predict_all_houses(data)
+
+
     ft_calculate_percent_error(data)
+
+
     ft_save_predictions_to_csv(data)
 
 

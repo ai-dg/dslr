@@ -35,37 +35,23 @@ HOUSE_COLORS = {
     "Slytherin": "green",
     "Hufflepuff": "gold",
 }
-
-
-def ft_generating_all_pair_subjects(data):
-    headers = list(data.keys())
-
-    list_of_pairs = {}
-
-    for header in headers:
-        list_of_pairs[header] = []
-
-
-    for subjects in headers:
-        subject = subjects
-        for sub in headers:
-            if sub != subject:
-                list_of_pairs[subject].append(sub)
-
-    return list_of_pairs
-
-    
+   
 
 def ft_putting_pairs_into_graph(data: Data_pairs):
     if data.name1 == data.name2:
         for house, points in data.points_by_color.items():
-            y_vals = [y for _, y in points]
-            data.ax.hist(y_vals, bins=20, alpha=0.5, label=house, color=HOUSE_COLORS.get(house, "black"))
+            ys = []
+            for _, y in points:
+                ys.append(y)
+            data.ax.hist(ys, bins=20, alpha=0.5, label=house, color=HOUSE_COLORS.get(house, "black"))
         data.ax.set_title(data.name1, fontsize=7)
     else:
         for house, points in data.points_by_color.items():
-            xs = [x for x, y in points]
-            ys = [y for x, y in points]
+            xs = []
+            ys = []
+            for x, y in points:
+                xs.append(x)
+                ys.append(y)
             data.ax.scatter(xs, ys, s=8, alpha=0.5, label=house, color=HOUSE_COLORS.get(house, "black"))
 
     data.ax.set_xticks([])
@@ -81,6 +67,7 @@ def ft_choising_values_for_plotting(notes_by_students, reverse_data):
     os.makedirs(output_dir)
 
     headers = list(notes_by_students.keys())
+    print(headers)
     size = len(headers)
 
     fig, axes = plt.subplots(size, size, figsize=(18, 18))
@@ -88,6 +75,7 @@ def ft_choising_values_for_plotting(notes_by_students, reverse_data):
 
     for i, name1 in enumerate(headers):
         for j, name2 in enumerate(headers):
+            
             data = Data_pairs()
             data.name1 = name1
             data.name2 = name2
@@ -113,23 +101,24 @@ def ft_choising_values_for_plotting(notes_by_students, reverse_data):
             
 
             ft_putting_pairs_into_graph(data)
-            # if i == 0 and j == size - 1:
-            #     data.ax.legend(loc="upper right", fontsize=6)
+
 
     plt.suptitle("Pair Plot of Numerical Subjects (colored by house)", fontsize=14)
 
-    # Légende globale
-    # Légende globale (placée à droite de la figure)
+    
     handles, labels = data.ax.get_legend_handles_labels()
+
+    # print(handles)
+    print(labels)
     fig.legend(
         handles, labels,
         loc='center left',
-        bbox_to_anchor=(1.01, 0.5),  # Juste à droite de la figure
-        fontsize=8
+        bbox_to_anchor=(1.01, 0.5),
+        fontsize=8 
     )
 
-
-    plt.tight_layout(rect=[0, 0, 1, 0.96])  # laisse un peu de place pour le titre et la légende
+    # rect=[left, bottom, right, top] en pourcentages
+    plt.tight_layout(rect=[0, 0, 1, 0.96])
     plt.savefig(f"{output_dir}/pair_plot_colored.png", bbox_inches="tight")
 
 
@@ -155,7 +144,7 @@ def main():
     data.reverse_data = ft_reverse_dict(data.data_csv)
 
     del data.notes_by_students["Index"]
-    data.list_of_pair_subjects = ft_generating_all_pair_subjects(data.notes_by_students)
+    # print(data.list_of_pair_subjects)
     ft_choising_values_for_plotting(data.notes_by_students, data.reverse_data)
     # print("ok")
 

@@ -60,41 +60,71 @@ def ft_normalize_features(data_dict):
     normalized = {}
     for key, values in data_dict.items():
         mean = sum(values) / len(values)
-        std = math.sqrt(sum((v - mean) ** 2 for v in values) / len(values))
+
+        sum_std = 0
+        for v in values:
+            sum_std += (v - mean) ** 2
+
+        std = math.sqrt(sum_std / len(values))
+
+        normalized_values = []
+
         if std == 0:
-            normalized[key] = [0 for _ in values]
+            for _ in values:
+                normalized_values.append(0)
         else:
-            normalized[key] = [(v - mean) / std for v in values]
+            for v in values:
+                normalized_values.append((v - mean) / std)
+
+        normalized[key] = normalized_values
+
     return normalized
 
 
 def sigmoid(z):
     return 1 / (1 + math.exp(-z))
 
-def ft_calculate_log_loss(data: Data):
+def ft_calculate_batch_gradient_descent(data: Data):
+    # Learning rate
     alpha = 0.01
     m = len(data.y)
 
     gradients = [0.0] * len(data.theta_values)
 
     total_error = 0.0
+    total_loss = 0
+    epsilon = 1e-15
 
     for i in range(m):
-        x_i = [1.0]  # biais
+        # biais
+        x_i = [1.0]  
         for key in data.list_of_subjects:
             x_i.append(data.x[i][key])
         
-        error = data.sig[i] - data.y[i]  # h(xᵢ) - yᵢ
+        # h(xᵢ) - yᵢ
+        error = data.sig[i] - data.y[i]  
         total_error += abs(error)
+
+        prediction = data.sig[i]
+        label = data.y[i]
+
+        if prediction in (0, 1):
+            prediction = max(min(prediction, epsilon), 1 - epsilon)
+        
+        log_loss = - (label * math.log(prediction) + (1 - label) * math.log(1 - prediction))
+        total_loss += log_loss
 
         for j in range(len(data.theta_values)):
             gradients[j] += error * x_i[j]
 
     for j in range(len(data.theta_values)):
         gradients[j] = (alpha / m) * gradients[j]
-        data.theta_values[j] -= gradients[j]  # mise à jour de theta
+        # mise à jour de theta
+        data.theta_values[j] -= gradients[j]  
     
-    data.error = total_error / m
+    data.error = total_loss / m
+
+
 
 
 
@@ -105,22 +135,31 @@ def ft_forward_pass_and_sigmoid(data: Data):
     data.sig = []
 
     for i in range(len(data.x)):
-        x_i = [1.0]  # biais
+        # biais
+        x_i = [1.0]  
         for key in data.list_of_subjects:
             x_i.append(data.x[i][key])
 
-        z = sum(theta * feature for theta, feature in zip(data.theta_values, x_i))
+
+        z = 0
+        for theta, feature in zip(data.theta_values, x_i):
+            z += theta * feature
+
+        # Logistic Regression - Prediction
         s = sigmoid(z)
+
         data.sig.append(s)
 
         # print(f"Échantillon {i}: z = {z:.4f}, sigmoid = {s:.4f}")
 
-    ft_calculate_log_loss(data)
+    ft_calculate_batch_gradient_descent(data)
 
     # print(data.theta_values)
 
 def ft_bgd_training_loop(data, house):
     iterations = 1000
+
+    # print(data.numeric_features.keys())
 
     data.theta_values = [0.0] * (len(data.numeric_features.keys()) + 1)
 
@@ -130,51 +169,62 @@ def ft_bgd_training_loop(data, house):
 
     # print(data.theta_values)
     # print(len(data.theta_values))
-    print(f"📉 BGD Log loss for {house}: {data.error:.6f}")
+    print(f"📉 BGD average Log loss for {house}: {data.error:.6f}")
 
 def ft_sgd_training_loop(data: Data, house: str):
     alpha = 0.01
-    epochs = 20  # nombre de passes sur l’ensemble des données
+    # Nombre de passes sur l’ensemble des donnees
+    epochs = 20  
 
     data.theta_values = [0.0] * (len(data.numeric_features.keys()) + 1)
     m = len(data.y)
     subjects = list(data.numeric_features.keys())
 
+    epsilon = 1e-15
+
     for epoch in range(epochs):
+        total_loss = 0
         for i in range(m):
             x_i = [1.0]  # biais
             for key in subjects:
                 x_i.append(data.x[i][key])
 
-            # calcul de zᵢ et prédiction
             z = sum(theta * xi for theta, xi in zip(data.theta_values, x_i))
             h = sigmoid(z)
             error = h - data.y[i]
 
-            # mise à jour de chaque θⱼ
+            prediction = h
+            label = data.y[i]
+
+            if prediction in (0, 1):
+                prediction = max(min(prediction, epsilon), 1 - epsilon)
+            
+            log_loss = - (label * math.log(prediction) + (1 - label) * math.log(1 - prediction))
+            total_loss += log_loss
+
             for j in range(len(data.theta_values)):
                 data.theta_values[j] -= alpha * error * x_i[j]
 
-    # calcul final du log loss (optionnel ici)
-    total_error = 0
-    for i in range(m):
-        x_i = [1.0] + [data.x[i][k] for k in subjects]
-        z = sum(theta * xi for theta, xi in zip(data.theta_values, x_i))
-        h = sigmoid(z)
-        total_error += abs(h - data.y[i])
-    data.error = total_error / m
 
-    print(f"📉 SGD Log loss for {house}: {data.error:.6f}")
+    data.error = total_loss / m
+
+    print(f"📉 SGD average Log loss for {house}: {data.error:.6f}")
 
 def ft_mini_batch_training_loop(data: Data, house: str):
+    alpha=0.01
+    
     batch_size=32
     epochs=20
-    alpha=0.01
+    
     m = len(data.y)
+    
     subjects = list(data.numeric_features.keys())
     data.theta_values = [0.0] * (len(subjects) + 1)
+    
+    epsilon = 1e-15
 
     for epoch in range(epochs):
+        total_loss = 0
         for start in range(0, m, batch_size):
             end = min(start + batch_size, m)
 
@@ -186,25 +236,27 @@ def ft_mini_batch_training_loop(data: Data, house: str):
                 h = sigmoid(z)
                 error = h - data.y[i]
 
+                prediction = h
+                label = data.y[i]
+
+                if prediction in (0, 1):
+                    prediction = max(min(prediction, epsilon), 1 - epsilon)
+                
+                log_loss = - (label * math.log(prediction) + (1 - label) * math.log(1 - prediction))
+                total_loss += log_loss
+
                 for j in range(len(data.theta_values)):
                     gradients[j] += error * x_i[j]
 
-            # Mise à jour des poids (moyenne des gradients)
             batch_len = end - start
             for j in range(len(data.theta_values)):
                 gradients[j] = gradients[j] / batch_len
                 data.theta_values[j] -= alpha * gradients[j]
 
-    # Calcul final du log loss
-    total_error = 0
-    for i in range(m):
-        x_i = [1.0] + [data.x[i][key] for key in subjects]
-        z = sum(theta * xi for theta, xi in zip(data.theta_values, x_i))
-        h = sigmoid(z)
-        total_error += abs(h - data.y[i])
-    data.error = total_error / m
 
-    print(f"📉 Mini-batch GD Log loss for {house}: {data.error:.6f}")
+    data.error = total_loss / m
+
+    print(f"📉 Mini-batch GD average Log loss for {house}: {data.error:.6f}")
 
 
 
@@ -282,6 +334,7 @@ def main():
         exit(1)
 
     valid_methods = {"BGD", "SGD", "M-Batch"}
+
     training_method = ""
     
 
