@@ -100,7 +100,7 @@ def ft_save_predictions_to_csv(data):
         for idx, house in data.predictions_str:
             csv_writer.writerow([idx, house])
 
-    print(f"✅ Résultats sauvegardés dans {path_csv}")
+    print(f"✅ Results exported into {path_csv}")
         
 
 def ft_calculate_percent_error(data : Data):
@@ -117,9 +117,9 @@ def ft_calculate_percent_error(data : Data):
     accuracy = (correct / total) * 100
     error_rate = 100 - accuracy
 
-    print(f"❌ Erreurs: {errors} / {total}")
-    print(f"📉 Pourcentage d'erreur: {error_rate:.2f}%")
-    print(f"✅ Précision: {accuracy:.2f}%")
+    print(f"❌ Errors: {errors} / {total}")
+    print(f"📉 Errors percent: {error_rate:.2f}%")
+    print(f"✅ Accuracy: {accuracy:.2f}%")
 
 
 
