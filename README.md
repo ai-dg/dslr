@@ -28,6 +28,7 @@ It's designed as part of **42 Paris' AI curriculum**, following the logic of `ft
 | <img src="https://github.com/user-attachments/assets/8513ed7f-deca-4705-b318-3a20b2b76ecd" alt="Histogram" width="500"> | <img src="https://github.com/user-attachments/assets/95ded32f-1aaf-42b6-8b60-81254d4e270f" alt="Correlation" width="500"> |
 
 </div>
+
 ---
 
 ## ▌Features
