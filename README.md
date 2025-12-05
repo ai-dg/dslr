@@ -25,7 +25,7 @@ It's designed as part of **42 Paris' AI curriculum**, following the logic of `ft
 
 | Histogram | Correlation (Scatter plot) |
 |:---:|:---:|
-| <img src="https://github.com/user-attachments/assets/8513ed7f-deca-4705-b318-3a20b2b76ecd" alt="Histogram" width="500"> | <img src="https://github.com/user-attachments/assets/f2294f05-e9b6-4f62-9d3c-d4e58a44cade" alt="Correlation" width="500"> |
+| <img src="https://github.com/user-attachments/assets/8513ed7f-deca-4705-b318-3a20b2b76ecd" alt="Histogram" width="500"> | <img src="https://github.com/user-attachments/assets/95ded32f-1aaf-42b6-8b60-81254d4e270f" alt="Correlation" width="500"> |
 
 </div>
 ---
