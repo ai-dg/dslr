@@ -89,10 +89,10 @@ cd dslr
 2. Launch data visualization scripts:
 
 ```bash
-python3 describe.py dataset_train.csv
-python3 histogram.py dataset_train.csv
-python3 scatter_plot.py dataset_train.csv
-python3 pair_plot.py dataset_train.csv
+python3 describe.py dataset/dataset_train.csv
+python3 histogram.py dataset/dataset_train.csv
+python3 scatter_plot.py dataset/dataset_train.csv
+python3 pair_plot.py dataset/dataset_train.csv
 ```
 
 3. Train the classifier:
