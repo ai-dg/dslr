@@ -63,9 +63,9 @@ J(θ) = -(1/m) * Σ [ y * log(h_θ(x)) + (1 - y) * log(1 - h_θ(x)) ]
 
 ### ■ Gradient formula
 
-```text
+$$
 θ_j := θ_j - α * (1/m) * Σ (h_θ(x⁽ⁱ⁾) - y⁽ⁱ⁾) * xⱼ⁽ⁱ⁾
-```
+$$
 
 ▌Getting Started
 ■ Requirements
@@ -81,7 +81,7 @@ You may use: `matplotlib`, `math`, `csv`, `os`
 1. Clone this repository
 
 ```bash
-git clone https://github.com/your-username/dslr.git
+git clone https://github.com/ai-dg/dslr.git
 cd dslr
 ```
 
