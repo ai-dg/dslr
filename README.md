@@ -59,10 +59,9 @@ $$
 ### ■ Cost function (Log-loss)
 
 $$
-J(\theta) = -\frac{1}{m} \sum_{i=1}^{m} \Big[
+J(\theta) = -\frac{1}{m} \sum_{i=1}^{m} 
 y^{(i)} \log\big(h_\theta(x^{(i)})\big)
 + (1 - y^{(i)}) \log\big(1 - h_\theta(x^{(i)})\big)
-\Big]
 $$
 
 ### ■ Gradient formula
