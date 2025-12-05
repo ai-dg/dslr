@@ -53,19 +53,23 @@ One model per house is trained (One-vs-All), using gradient descent variants.
 ### ■ Hypothesis function
 
 $$
-h_θ(x) = 1 / (1 + e^(-θᵀx))
+h_\theta(x) = \frac{1}{1 + e^{-\theta^T x}}
 $$
 
 ### ■ Cost function (Log-loss)
 
 $$
-J(θ) = -(1/m) * Σ [ y * log(h_θ(x)) + (1 - y) * log(1 - h_θ(x)) ]
+J(\theta) = -\frac{1}{m} \sum_{i=1}^{m} \Big[
+y^{(i)} \log\big(h_\theta(x^{(i)})\big)
++ (1 - y^{(i)}) \log\big(1 - h_\theta(x^{(i)})\big)
+\Big]
 $$
 
 ### ■ Gradient formula
 
 $$
-θ_j := θ_j - α * (1/m) * Σ (h_θ(x⁽ⁱ⁾) - y⁽ⁱ⁾) * xⱼ⁽ⁱ⁾
+\theta_j := \theta_j - \alpha \,\frac{1}{m} \sum_{i=1}^{m}
+\big(h_\theta(x^{(i)}) - y^{(i)}\big)\, x_j^{(i)}
 $$
 
 ▌Getting Started
