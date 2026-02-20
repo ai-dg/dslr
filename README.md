@@ -1,4 +1,10 @@
 # DSLR: Datascience × Logistic Regression  
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ai-dg/dslr/blob/main/DSLR_Project_Explanation.ipynb#scrollTo=VUld1UAUXO8m) [![View Notebook on GitHub](https://img.shields.io/badge/View%20Notebook-GitHub-black?logo=github)](https://github.com/ai-dg/dslr/blob/main/DSLR_Project_Explanation.ipynb)
+
+
+
+![Score](https://img.shields.io/badge/Score-125%25-brightgreen)  
+
 ### Harry Potter and a Data Scientist 
 
 ---
