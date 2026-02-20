@@ -55,7 +55,7 @@ def ft_smart_convert(lst):
             converted = ft_special_cases_in_float(val)
             values_to_convert.append(converted)
         else:
-            print(f"Non-numeric value found: {val} replaced by 0")
+            # print(f"Non-numeric value found: {val} replaced by 0")
             values_to_convert.append(0)
     return values_to_convert
 

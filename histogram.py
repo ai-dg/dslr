@@ -4,7 +4,8 @@ import os
 from describe import ft_recovering_data_from_dataset, ft_recover_numeric_values_from_columns, ft_is_float
 import matplotlib
 
-matplotlib.use("GTK3Agg")
+# Utiliser le backend Agg pour compatibilité avec Colab et environnements sans interface graphique
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 

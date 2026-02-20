@@ -6,8 +6,8 @@ from histogram import ft_reverse_dict
 import matplotlib
 import shutil
 
-
-matplotlib.use("GTK3Agg")
+# Utiliser le backend Agg pour compatibilité avec Colab et environnements sans interface graphique
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 class Data(object):
