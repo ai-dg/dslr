@@ -121,7 +121,7 @@ This generates houses.csv.
 ✔️ Training with multiple optimization strategies  
 ✔️ Export trained θ per house to JSON  
 ✔️ Visualization of pairwise subject correlations   
-✔️ Calculation of precision vs actual labels  
+✔️ Accuracy against true labels (when the input file has them)  
 
 
 ### ▌Example Output
@@ -134,10 +134,14 @@ Choose training method (BGD, SGD, M-Batch): SGD
 📉 SGD average Log loss for Ravenclaw: 0.069896
 📉 SGD average Log loss for Slytherin: 0.048540
 
-$ python3 logreg_predict.py dataset_test.csv
-✅ Results exported into houses.csv
-✅ Accuracy: 98.25%
+$ python3 logreg_predict.py dataset_train.csv
+❌ Errors: 34 / 1600
+📉 Errors percent: 2.12%
+✅ Accuracy: 97.88%
+✅ Results exported into ./houses.csv
 ```
+
+The 97.88% is a **training-set accuracy**: the model is evaluated on the same 1600 students it was trained on (cell 22 of the notebook, with the model left by the method-comparison cell, last trained with M-Batch). `dataset_test.csv` has no house labels (0 of 400), so there is no held-out score.
 
 ### ▌Summary
 This project teaches you how to:
