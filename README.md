@@ -23,7 +23,7 @@ This project is a complete machine learning pipeline built from scratch — with
 It's designed as part of **42 Paris' AI curriculum**, following the logic of `ft_linear_regression`, but extended to **multiclass classification** with:
 - Data analysis,
 - Visualization,
-- Feature selection,
+- Exploratory feature analysis,
 - Logistic regression (One-vs-All),
 - Custom gradient descent (BGD, SGD, Mini-Batch).
 
@@ -39,7 +39,7 @@ It's designed as part of **42 Paris' AI curriculum**, following the logic of `ft
 
 ## ▌Features
 
-✔️ Full feature engineering and cleaning  
+✔️ Basic cleaning (non-numeric and missing values set to zero)  
 ✔️ Statistical description (mean, std, IQR, skewness, kurtosis...)  
 ✔️ Data visualizations: Histogram, Scatter Plot, Pair Plot  
 ✔️ Logistic regression classifier (One-vs-All)  
